@@ -7,3 +7,21 @@ services:
       - ..:/workspace
       working_dir : /workspace
       command: tail -f /dev/null # for keep the container ruinning
+   zookeeper:
+      image: confluentic/cp-zookeeper:7.4.0
+      hostname: zookeeper
+      container_name: zookeeper_container
+      ports:
+      - "2181:2181"
+      environment:
+      ZOOKEEPER_CLIEN_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      healthcheck:
+         test: ['CMD','bash','-c',"echo 'ruok'|nc localhost 2181"]
+         interval: 10s
+         timeout: 5s
+         retries: 5
+      networks:
+      - confluent
+
+

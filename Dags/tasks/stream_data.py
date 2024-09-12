@@ -7,6 +7,7 @@ class StreamingDataTask():
             self.url = url
             
     def streaming_data(self):
-       reponds = requests.get(self.url)
-    #    reponds.json()
-       print(reponds.json())
+       res = requests.get(self.url)
+       respond=res.json()
+       result=respond['results'][0]
+       print(json.dumps(result,indent=5))

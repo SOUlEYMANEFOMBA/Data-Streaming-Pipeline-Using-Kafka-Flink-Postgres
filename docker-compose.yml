@@ -129,6 +129,10 @@ services:
             max-file: "3"
       volumes:
          - ./Dags:/opt/airflow/dags
+         - ./airflow-data/includes:/opt/airflow/includes
+         - ./airflow-data/logs:/opt/airflow/logs
+         - ./airflow-data/plugins:/opt/airflow/plugins
+         - ./airflow-data/airflow.cfg:/opt/airflow/airflow.cfg
       ports:
          - "8080:8080"
       command: bash -c "/opt/airflow/init_airflow.sh && airflow webserver"
@@ -150,6 +154,10 @@ services:
             condition: service_healthy
       volumes:
          - ./dags:/opt/airflow/dags
+         - ./airflow-data/includes:/opt/airflow/includes
+         - ./airflow-data/logs:/opt/airflow/logs
+         - ./airflow-data/plugins:/opt/airflow/plugins
+         - ./airflow-data/airflow.cfg:/opt/airflow/airflow.cfg
       environment:
          - LOAD_EX=n
          - EXECUTOR=Sequential

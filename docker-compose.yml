@@ -110,6 +110,67 @@ services:
          interval: 30s
          timeout: 10s
          retries: 5
+   
+   webserver:
+      build: 
+         context: .
+         dockerfile: Dockerfile
+      container_name: airflow_webserver
+      depends_on:
+         - postgres
+      environment:
+         - LOAD_EX=n
+         - EXECUTOR=Sequential
+         - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+         - AIRFLOW_WEBSERVER_SECRET_KEY=this_is_a_very_secured_key
+      logging:
+         options:
+            max-size: 10m
+            max-file: "3"
+      volumes:
+         - ./Dags:/opt/airflow/dags
+      ports:
+         - "8080:8080"
+      command: bash -c "/opt/airflow/init_airflow.sh && airflow webserver"
+      healthcheck:
+         test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+         interval: 30s
+         timeout: 10s
+         retries: 5
+      networks:
+         - confluent
 
+   scheduler:
+      build: 
+         context: .
+         dockerfile: Dockerfile
+      container_name: airflow_scheduler
+      depends_on:
+         webserver:
+            condition: service_healthy
+      volumes:
+         - ./dags:/opt/airflow/dags
+      environment:
+         - LOAD_EX=n
+         - EXECUTOR=Sequential
+         - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+         - AIRFLOW_WEBSERVER_SECRET_KEY=this_is_a_very_secured_key
+      command: bash -c "pip install -r ./requirements.txt && airflow db upgrade && airflow scheduler"
+      networks:
+         - confluent
+
+   postgres:
+      image: postgres:14.0
+      container_name: airflow_postgres
+      environment:
+         - POSTGRES_USER=airflow
+         - POSTGRES_PASSWORD=airflow
+         - POSTGRES_DB=airflow
+      logging:
+         options:
+            max-size: 10m
+            max-file: "3"
+      networks:
+         - confluent
 networks:
    confluent:

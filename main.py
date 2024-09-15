@@ -4,12 +4,9 @@ from Dags.tasks.stream_data import StreamingDataTask
 
 def main():
     doawloaddata = DoawloadDataTask('https://randomuser.me/api/')
-    res=doawloaddata.get_data()
     formatData =FormatDataTask()
-    result =formatData.format_data(res)
-    print(result)
     stream=StreamingDataTask()
-    stream.streaming_data(result)
+    stream.streaming_data(doawloaddata,formatData)
 
 if __name__=="__main__":
     main()

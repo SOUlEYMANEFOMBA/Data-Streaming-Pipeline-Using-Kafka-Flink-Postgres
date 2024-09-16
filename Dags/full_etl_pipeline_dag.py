@@ -1,9 +1,9 @@
 from datetime import datetime,timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from tasks.doawload_data import DoawloadDataTask
-from tasks.format_data import FormatDataTask
-from tasks.stream_data import StreamingDataTask
+from tasks.kafka.doawload_data_task import DoawloadDataTask
+from tasks.kafka.format_data_task import FormatDataTask
+from tasks.kafka.Kafka_data_publisher_task import KafkaDataPublisherTask
 
 default_args= {
     'ouner':'Fomba souleymane',
@@ -13,7 +13,7 @@ default_args= {
 }
 doawloaddata = DoawloadDataTask('https://randomuser.me/api/')
 formatData =FormatDataTask()
-stream=StreamingDataTask()
+stream=KafkaDataPublisherTask()
 # stream.streaming_data(doawloaddata,formatData)
 with DAG('user_automate',
          default_args=default_args,

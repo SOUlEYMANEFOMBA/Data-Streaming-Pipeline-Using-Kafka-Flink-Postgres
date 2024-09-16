@@ -3,7 +3,7 @@ import json
 import logging
 import time
 
-class StreamingDataTask():
+class KafkaDataPublisherTask():
     """Cette task envoie des données formatées à Kafka"""
     def streaming_data(self, doawloaddata,formatData):
         logging.info(f"started data streaming into kafka")

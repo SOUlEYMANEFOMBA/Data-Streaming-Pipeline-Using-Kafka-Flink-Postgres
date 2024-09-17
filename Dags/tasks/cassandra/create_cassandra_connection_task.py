@@ -14,6 +14,7 @@ class CreateCassandraConnectionTask():
             session: La session Cassandra à utiliser pour exécuter les requêtes.
         """
         logging.info(f"Begginning of create Keyspace")
+        print("Begginning of create Keyspace")
         session.execute("""
                         CREATE KEYSPACE IF NOT EXISTS spark_streams
                         WITH REPLICATION= {
@@ -32,6 +33,7 @@ class CreateCassandraConnectionTask():
             session: La session Cassandra à utiliser pour exécuter les requêtes.
         """
         logging.info(f"Beggining of create Table")
+        print("Beggining of create Table")
         session.execute("""
                         CREATE TABLE IF NOT EXISTS spark_streams.created_users (
                         id UUID PRIMARY KEY,
@@ -55,6 +57,7 @@ class CreateCassandraConnectionTask():
         Returns:
             Session: La session Cassandra si la connexion est réussie, sinon None.
         """
+        print("Begginning of create Cassandra connection")
         logging.info("Begginning of create Cassandra connection")
         try :
             #Connection to cassandra connector cluster

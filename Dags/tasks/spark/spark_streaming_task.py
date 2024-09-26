@@ -52,6 +52,7 @@ class SparkStreamingTask():
         try:
             spark_connect = SparkSession.builder \
                 .appName('SparkDataStreaming') \
+                .master('spark://spark-master:7077') \
                 .config('spark.jars.packages', "com.datastax.spark:spark-cassandra-connector_2.13:3.4.1,"
                                                "org.apache.spark:spark-sql-kafka-0-10_2.13:3.4.1") \
                 .config('spark.cassandra.connection.host', 'cassandra') \
